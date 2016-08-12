@@ -1,0 +1,18 @@
+language: r
+
+cache: packages
+
+r_binary_packages:
+    - covr
+    - huge
+    - igraph
+    - devtools
+
+install:
+    - Rscript -e 'install.packages(c("devtools", "testthat"))'
+    - Rscript -e 'devtools::install_github("cdgreenidge/brcbase", ref = "kevin")'
+
+after_success:
+  - Rscript -e 'library(covr); codecov()'
+
+warnings_are_errors: true
