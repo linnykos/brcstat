@@ -2,14 +2,8 @@ language: r
 
 cache: packages
 
-r_binary_packages:
-    - covr
-    - huge
-    - igraph
-    - devtools
-
 install:
-    - Rscript -e 'install.packages(c("devtools", "testthat"))'
+    - Rscript -e 'install.packages(c("devtools", "testthat", "huge", "igraph", "covr"))'
     - Rscript -e 'devtools::install_github("cdgreenidge/brcbase", ref = "kevin")'
 
 after_success:
