@@ -19,6 +19,23 @@ isValid.BrcFmriGraphList <- function(obj){
      must be of class BrcParcellation")
   if(!brcbase::isValid(obj$parcellation)) stop("obj$parcellation must be valid")
 
+  .checkNumberofNodes(obj)
+  
   TRUE
 }
 
+.checkNumberofNodes <- function(obj){
+  if(class(obj) != "BrcFmriGraphList") stop("obj must be of class 
+                                            BrcFmriGraphList")
+  
+  partition <- obj$parcellation$partition
+  parcels <- unique(partition)
+  num.parcels <- length(parcels[parcels != 0])
+  
+  nvec <- sapply(obj$graph.list, function(x){igraph::vcount(x$graph)})
+
+  if(!all(nvec == num.parcels)) stop("number of vertices in in obj$graph.list
+    do not match the number of parcels in obj$parcellation")
+  
+  TRUE
+}

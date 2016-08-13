@@ -24,3 +24,23 @@ test_that("it makes a valid BrcFmriGraphList", {
   expect_true(class(obj) == "BrcFmriGraphList")
   expect_true(brcbase::isValid(obj))
 })
+
+#######################
+
+## test .checkNumberofNodes
+
+test_that("it passes on a valid instance", {
+  obj <- BrcFmriGraphList(graph.list, "01", parcellation)
+  expect_true(.checkNumberofNodes(obj))
+})
+
+test_that("it errors when graphs have different sizes", {
+  obj <- BrcFmriGraphList(graph.list, "01", parcellation)
+  
+  graph3 <- igraph::make_graph(c(1:10), directed = FALSE)
+  bgraph3 <- BrcGraph(graph3)
+  
+  obj$graph.list[[3]] <- bgraph3
+  
+  expect_error(.checkNumberofNodes(obj))
+})
