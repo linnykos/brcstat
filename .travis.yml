@@ -2,9 +2,14 @@ language: r
 
 cache: packages
 
-install:
-    - Rscript -e 'install.packages(c("devtools", "testthat", "huge", "igraph", "covr"))'
+before_install:
+    - Rscript -e 'install.packages(c("devtools", "testthat"))'
     - Rscript -e 'devtools::install_github("cdgreenidge/brcbase", ref = "kevin")'
+
+r_binary_packages:
+    - igraph
+    - huge
+    - covr
 
 after_success:
   - Rscript -e 'library(covr); codecov()'
