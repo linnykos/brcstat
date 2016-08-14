@@ -23,13 +23,20 @@ estimateGraph.BrcFmri <- function(x, method = "correlation", ...){
     x$parcellation), class = "BrcFmriGraphList")
 }
 
-.estimateGraphCorrelation <- function(mat, ...){
-  x <- igraph::make_graph(rep(1:ncol(mat), times = 2), directed = F)
-  obj <- BrcGraph(x)
-  graph.list <- vector("list", 1)
-  graph.list[[1]] <- obj
+.estimateGraphCorrelation <- function(mat, lambda = seq(0,1,length.out=11),
+ ...){
+  stopifnot(is.numeric(lambda))
+  stopifnot(all(diff(lambda) > 0))
   
-  graph.list
+  len <- length(lambda)
+  n <- ncol(mat)
+  cor.mat <- stats::cor(mat, ...)
+  
+  lapply(lambda, function(x){
+    idx <- which(abs(cor.mat) > x, arr.ind = T); idx <- t(idx)
+    graph <- .makeGraphDefault(idx, n = n)
+    BrcGraph(graph, "correlation", x)
+  })
 }
 
 .estimateGraphGlasso <- function(mat, ...){
