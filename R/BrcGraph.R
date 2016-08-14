@@ -16,3 +16,8 @@ isValid.BrcGraph <- function(obj){
   
   TRUE
 }
+
+.makeGraphDefault <- function(edges, n = max(edges), ...){
+  obj <- igraph::make_graph(edges, n, directed = FALSE)
+  igraph::simplify(obj)
+}

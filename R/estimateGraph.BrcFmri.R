@@ -1,4 +1,4 @@
-brcGraphTypes <- function(){
+BrcGraphTypes <- function(){
   c("correlation", "partialCorrelation.glasso", 
     "partialCorrelation.neighborhoodSelect")
 }
@@ -8,7 +8,7 @@ estimateGraph <- function(x, ...) {UseMethod("estimateGraph")}
 estimateGraph.BrcFmri <- function(x, method = "correlation", ...){
   if(class(x) != "BrcFmri") stop("x must be of class BrcFmri")
   if(length(method) != 1) stop("method must be length 1")
-  if(!method %in% brcGraphTypes()) 
+  if(!method %in% BrcGraphTypes()) 
     stop("method must be a method in brcGraphTypes()")
   
   if(method == "correlation"){
