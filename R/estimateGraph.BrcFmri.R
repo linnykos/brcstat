@@ -23,7 +23,7 @@ estimateGraph.BrcFmri <- function(x, method = "correlation", ...){
     x$parcellation), class = "BrcFmriGraphList")
 }
 
-.estimateGraphCorrelation <- function(mat, lambda = seq(0,1,length.out=11),
+.estimateGraphCorrelation <- function(mat, lambda = seq(0,1,length.out=10),
  ...){
   stopifnot(is.numeric(lambda))
   stopifnot(all(diff(lambda) > 0))
@@ -39,20 +39,24 @@ estimateGraph.BrcFmri <- function(x, method = "correlation", ...){
   })
 }
 
-.estimateGraphGlasso <- function(mat, ...){
-  x <- igraph::make_graph(rep(1:ncol(mat), times = 2), directed = F)
-  obj <- BrcGraph(x)
-  graph.list <- vector("list", 1)
-  graph.list[[1]] <- obj
-  
-  graph.list
+.estimateGraphGlasso <- function(mat, verbose = F, ...){
+  res <- huge::huge(mat, method = "glasso", verbose = verbose, ...)
+  n <- nrow(mat)
+
+  lapply(1:length(res$path), function(x){
+    idx <- Matrix::which(res$path[[x]] != 0, arr.ind = T); idx <- t(idx)
+    graph <- .makeGraphDefault(idx, n = n)
+    BrcGraph(graph, "partialCorrelation.glasso", res$lambda[x])
+  })
 }
 
-.estimateGraphNS <- function(mat, ...){
-  x <- igraph::make_graph(rep(1:ncol(mat), times = 2), directed = F)
-  obj <- BrcGraph(x)
-  graph.list <- vector("list", 1)
-  graph.list[[1]] <- obj
+.estimateGraphNS <- function(mat, verbose = F, ...){
+  res <- huge::huge(mat, method = "mb", verbose = verbose, ...)
+  n <- nrow(mat)
   
-  graph.list
+  lapply(1:length(res$path), function(x){
+    idx <- Matrix::which(res$path[[x]] != 0, arr.ind = T); idx <- t(idx)
+    graph <- .makeGraphDefault(idx, n = n)
+    BrcGraph(graph, "partialCorrelation.neighborhoodSelect", res$lambda[x])
+  })
 }

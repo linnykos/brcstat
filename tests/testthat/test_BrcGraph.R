@@ -75,3 +75,9 @@ test_that("it makes graph with edge.list as a 2x(num.edges) matrix",{
   expect_true(mat[1,2] == 1)
   expect_true(mat[1,3] == 0)
 })
+
+test_that("it can make graph from empty edge.list", {
+  obj <- .makeGraphDefault(numeric(0),n=12)
+  expect_true(igraph::vcount(obj) == 12)
+  expect_true(igraph::ecount(obj) == 0)
+})

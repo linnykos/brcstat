@@ -39,7 +39,7 @@ test_that("it puts the lambda in right places", {
 })
 
 test_that("all elements in the list are correlation graphs",{
-for(i in 1:length(obj)){
+  for(i in 1:length(obj)){
     expect_true(obj[[i]]$type == "correlation")
   }
 })
@@ -55,3 +55,35 @@ test_that("the first graph is completely dense", {
 test_that("the last graph is empty", {
 expect_true(igraph::ecount(obj[[length(obj)]]$graph) == 0)
 })
+
+###############################
+
+## test .estimateGraphGlasso
+obj <- .estimateGraphGlasso(mat)
+
+test_that("all elements in list are glasso graphs",{
+  for(i in 1:length(obj)){
+    expect_true(obj[[i]]$type == "partialCorrelation.glasso")
+  }
+})
+
+test_that("the first graph is empty", {
+  expect_true(igraph::ecount(obj[[1]]$graph) == 0)
+})
+
+##########################
+
+## test .estimateGraphNS
+obj <- .estimateGraphNS(mat)
+
+test_that("all elements in list are ns graphs",{
+  for(i in 1:length(obj)){
+    expect_true(obj[[i]]$type == "partialCorrelation.neighborhoodSelect")
+  }
+})
+
+test_that("the first graph is empty", {
+  expect_true(igraph::ecount(obj[[1]]$graph) == 0)
+})
+
+ 
