@@ -45,39 +45,45 @@ test_that("it makes a valid BrcGraph when no type or parameter are used", {
 
 #####################
 
-## test .makeGraphDefault 
+## test makeGraphDefault 
 
 test_that("it makes an undireted graph", {
-  obj <- .makeGraphDefault(1:10)
+  obj <- makeGraphDefault(1:10)
   expect_true(!igraph::is.directed(obj))
 })
 
 test_that("it makes a graph without loops", {
-  obj <- .makeGraphDefault(c(1:10,rep(1:10, each = 2)))
+  obj <- makeGraphDefault(c(1:10,rep(1:10, each = 2)))
   expect_true(!any(igraph::which_loop(obj)))
   expect_true(igraph::ecount(obj) == 5)
 })
 
 test_that("it makes a graph without duplicate edges", {
-  obj <- .makeGraphDefault(c(1:10,1:10))
+  obj <- makeGraphDefault(c(1:10,1:10))
   expect_true(igraph::ecount(obj) == 5)
 })
 
 test_that("it makes graph properly when there are isolated edges", {
-  obj <- .makeGraphDefault(c(1:10), n = 15)
+  obj <- makeGraphDefault(c(1:10), n = 15)
   expect_true(igraph::ecount(obj) == 5)
   expect_true(igraph::vcount(obj) == 15)
 })
 
 test_that("it makes graph with edge.list as a 2x(num.edges) matrix",{
-  obj <- .makeGraphDefault(matrix(1:10,nrow = 2))
+  obj <- makeGraphDefault(matrix(1:10,nrow = 2))
   mat <- igraph::as_adjacency_matrix(obj)
   expect_true(mat[1,2] == 1)
   expect_true(mat[1,3] == 0)
 })
 
 test_that("it can make graph from empty edge.list", {
-  obj <- .makeGraphDefault(numeric(0),n=12)
+  obj <- makeGraphDefault(numeric(0),n=12)
   expect_true(igraph::vcount(obj) == 12)
   expect_true(igraph::ecount(obj) == 0)
+})
+
+test_that("it does not require unique consecutive edges", {
+  obj <- makeGraphDefault(c(1,3,6,10))
+    expect_true(igraph::vcount(obj) == 10)
+  expect_true(igraph::ecount(obj) == 2)
 })
