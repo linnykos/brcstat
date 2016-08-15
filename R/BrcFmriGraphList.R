@@ -26,9 +26,7 @@ isValid.BrcFmriGraphList <- function(obj){
   if(class(obj) != "BrcFmriGraphList") stop("obj must be of class 
                                             BrcFmriGraphList")
   
-  partition <- obj$parcellation$partition
-  parcels <- unique(partition)
-  num.parcels <- length(parcels[parcels != 0])
+  num.parcels <- brcbase::numParcels(obj$parcellation)
   
   nvec <- sapply(obj$graph.list, function(x){igraph::vcount(x$graph)})
 
