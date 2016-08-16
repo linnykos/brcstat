@@ -1,5 +1,24 @@
 context("Test plot.BrcFmriGraphList")
 
+## test .computeParcelCenter
+
+test_that("it returns itself if matrix is all singletons", {
+  mat <- matrix(1:9, 3, 3)
+  res <- .computeParcelCenter(mat)
+  expect_true(is.matrix(res))
+  expect_true(all(colnames(res) == as.character(1:9)))
+  for(i in 1:9){
+    expect_true(mat[res[1,i], res[2,i]] == i)
+  }
+})
+
+test_that("it returns a matrix with no columns if matrix is all 0's",{
+  mat <- matrix(0, 3, 3)
+  res <- .computeParcelCenter(mat)
+  expect_true(is.matrix(res))
+  expect_true(ncol(res) == 0)
+})
+
 ## test .findNeighbors
 
 test_that("it finds the right neighbors for a single node",{

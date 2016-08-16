@@ -40,6 +40,19 @@ plot.BrcFmriGraphList <- function(x, numSlices, graph.idx,
   invisible(.plotSlices(slices, brcbase::numParcels(x), colors))
 }
 
+.computeParcelCenter <- function(mat){
+  vec <- .findUniqueParcels(mat)
+  
+  positions <- sapply(vec, function(x){
+    idx <- which(mat == x, arr.ind = T)
+    apply(idx, 2, stats::median)
+  })
+  
+  if(length(positions) == 0) positions <- matrix(0, ncol = 0, nrow = 2)
+  colnames(positions) <- vec
+  positions
+}
+
 .findNeighbors <- function(vec, graph){
   stopifnot(max(vec) <= igraph::vcount(graph))
   
