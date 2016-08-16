@@ -45,7 +45,10 @@ plot.BrcFmriGraphList <- function(x, numSlices, graph.idx,
   
   positions <- sapply(vec, function(x){
     idx <- which(mat == x, arr.ind = T)
-    apply(idx, 2, stats::median)
+    med <- apply(idx, 2, stats::median)
+    
+    dist.vec <- apply(idx, 1, function(y){ sum((y-med)^2) })
+    idx[which.min(dist.vec),]
   })
   
   if(length(positions) == 0) positions <- matrix(0, ncol = 0, nrow = 2)

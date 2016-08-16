@@ -19,6 +19,24 @@ test_that("it returns a matrix with no columns if matrix is all 0's",{
   expect_true(ncol(res) == 0)
 })
 
+test_that("it returns a point inside its own parcel",{
+  mat <- matrix(0, 5, 5)
+  mat[,1] <- 1; mat[,5] <- 1; mat[1,] <- 1
+  res <- .computeParcelCenter(mat)
+  expect_true(mat[res[1],res[2]] == 1)
+})
+
+test_that("it returns the correct point for awkward shapes",{
+  mat <- matrix(0, 5, 5)
+  mat[,1] <- 1; mat[,5] <- 1; mat[1,] <- 1
+  res <- .computeParcelCenter(mat)
+  
+  idx <- which(mat == 1, arr.ind = T)
+  dist.mat <- dist(idx, method = "manhattan"); dist.mat <- as.matrix(dist.mat)
+  dist.vec <- apply(dist.mat, 2, function(x){sum(abs(x))})
+  expect_true(all(res == idx[which.min(dist.vec),]))
+})
+
 ## test .findNeighbors
 
 test_that("it finds the right neighbors for a single node",{
