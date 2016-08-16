@@ -28,6 +28,7 @@ estimateGraph <- function(x, method = "correlation", ...){
   if(length(method) != 1) stop("method must be length 1")
   if(!method %in% BrcGraphTypes()) 
     stop("method must be a method in brcGraphTypes()")
+  if(!isValid(x)) stop("x must be a valid instance of BrcFmri")
   
   if(method == "correlation"){
     graph.list <- .estimateGraphCorrelation(x$data2d, ...)

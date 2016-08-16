@@ -1,5 +1,7 @@
 context("Test estimate.Graph")
 
+## test estimateGraph.BrcFmri 
+
 mat <- matrix(data=c(1, 2, 3, 4, 5, 6, 7, 8), nrow=2, ncol=4)
 partition <- c(0, 1, 2, 2, 3, 3, 4, 0)
 parcellation <- brcbase::BrcParcellation(dim3d=c(2, 2, 2), partition)
@@ -9,6 +11,13 @@ rm(list = c("mat", "partition", "parcellation"))
 test_that("it produces a valid BrcFmriGraphList obj", {
   obj <- estimateGraph(mri)
   expect_true(brcbase::isValid(obj))
+})
+
+
+test_that("it errors if BrcFmri is not valid", {
+  mri2 <- mri
+  mri$parcellation$dim3d <- c(2,3,2)
+  expect_error(estimateGraph(mri))
 })
 
 #############
