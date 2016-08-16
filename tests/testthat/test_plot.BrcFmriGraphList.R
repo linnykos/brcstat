@@ -32,7 +32,8 @@ test_that("it returns the correct point for awkward shapes",{
   res <- .computeParcelCenter(mat)
   
   idx <- which(mat == 1, arr.ind = T)
-  dist.mat <- dist(idx, method = "manhattan"); dist.mat <- as.matrix(dist.mat)
+  dist.mat <- stats::dist(idx, method = "manhattan")
+  dist.mat <- as.matrix(dist.mat)
   dist.vec <- apply(dist.mat, 2, function(x){sum(abs(x))})
   expect_true(all(res == idx[which.min(dist.vec),]))
 })
