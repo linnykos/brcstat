@@ -40,10 +40,20 @@ plot.BrcFmriGraphList <- function(x, numSlices, graph.idx,
   invisible(.plotSlices(slices, brcbase::numParcels(x), colors))
 }
 
+.findNeighbors <- function(vec, graph){
+  stopifnot(max(vec) <= igraph::vcount(graph))
+  
+  res <- igraph::ego(graph, 1, node = vec, mode = "all")
+  for(i in 1:length(res)){
+    res[[i]] <- sort(res[[i]])
+  }
+  
+  res
+}
+
 .findUniqueParcels <- function(mat){
   sort(unique(mat[mat != 0]))
 }
-
 
 .isColor <- function(colors) {
   unname(sapply(colors, function(x) {

@@ -1,5 +1,25 @@
 context("Test plot.BrcFmriGraphList")
 
+## test .findNeighbors
+
+test_that("it finds the right neighbors for a single node",{
+  graph <- makeGraphDefault(c(1:10, 1,5, 1,8))
+  res <- .findNeighbors(1, graph)
+  expect_true(is.list(res))
+  expect_true(all(res[[1]] == c(1,2,5,8)))
+})
+
+test_that("it finds the right neighbor when vec is a list", {
+  graph <- makeGraphDefault(c(1:10, 2:9, 1,3, 2,4, 3,5, 4,6, 5,7, 6,8, 
+    7,9, 8,10))
+  res <- .findNeighbors(1:10, graph)
+  expect_true(is.list(res))
+  expect_true(length(res) == 10)
+  for(i in 1:10){
+    expect_true(all(abs(res[[i]]-i)<=2))
+    expect_true(all(c(max(1,i-2):min(10,i+2)) %in% res[[i]]))
+  }
+})
 
 ## test .findUniqueParcels
 
