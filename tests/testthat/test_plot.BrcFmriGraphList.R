@@ -1,6 +1,39 @@
 context("Test plot.BrcFmriGraphList")
 
 
+## test .findUniqueParcels
+
+test_that("it finds the right parcels", {
+  mat <- matrix(c(rep(0,15),1:10),5,5)
+  expect_true(all(c(.findUniqueParcels(mat) == c(1:10))))
+})
+
+test_that("it works when the matrix is all 0", {
+  mat <- matrix(rep(0,25),5,5)
+  expect_true(length(.findUniqueParcels(mat)) == 0)
+})
+
+
+# Test .isColor()
+
+test_that("it returns TRUE if the string is a valid color, and FALSE if not", {
+  actual <- .isColor(c("asdf", "#000000"))
+  expected <- c(FALSE, TRUE)
+  expect_equal(actual, expected)
+})
+
+# test .defaultColors()
+
+test_that("the first color is black", {
+  colors <- .defaultColors(5)
+  expect_equal(colors[[1]], "#000000FF")
+})
+
+test_that("it gives you one color for each parcel plus black", {
+  colors <- .defaultColors(5)
+  expect_equal(length(colors), 6)
+})
+
 # Test .parcellationToArray()
 
 dim3d <- c(2, 2, 2)
